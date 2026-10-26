@@ -159,6 +159,18 @@ footer{padding:36px 0 calc(36px + env(safe-area-inset-bottom,0px));border-top:1p
 .row b{width:78px;font-weight:400;flex:none}.row span{height:9px;border-radius:3px;display:block}
 .row u{text-decoration:none;color:var(--text);margin-left:auto}
 @media (max-width:560px){.rail button{width:44px}.row b{width:66px}}
+.contact-modal{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(6,10,15,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.contact-modal.open{opacity:1;visibility:visible}
+.cm-card{position:relative;width:min(380px,100%);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:36px 28px 28px;text-align:center;transform:translateY(16px) scale(.96);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+.contact-modal.open .cm-card{transform:none}
+.cm-card h3{font-size:22px;margin-bottom:6px}
+.cm-card p{color:var(--muted);font-size:14px;margin-bottom:18px}
+.cm-num{display:block;font-family:var(--mono);font-size:22px;color:var(--amber);background:var(--amber-dim);border:1px solid var(--amber);border-radius:10px;padding:14px;margin-bottom:20px;direction:ltr;letter-spacing:.02em}
+.cm-actions{display:flex;flex-direction:column;gap:10px}
+.cm-actions .btn{justify-content:center}
+.btn-wa{background:#25D366;color:#0b1f12;font-weight:500}
+.cm-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);color:var(--text);font-size:20px;line-height:1;cursor:pointer}
+.cm-close:hover{border-color:var(--amber)}
 </style>
 </head>
 <body>
@@ -185,7 +197,18 @@ footer{padding:36px 0 calc(36px + env(safe-area-inset-bottom,0px));border-top:1p
 <div class="photo-cap"><b>Mohammed Ewies</b><span>Data Analyst · Power BI Developer</span></div>
 </div>
 </div>
-
+<div class="contact-modal" id="contactModal" role="dialog" aria-modal="true" aria-label="Contact phone" aria-hidden="true">
+<div class="cm-card">
+<button class="cm-close" id="cmClose" type="button" aria-label="Close">×</button>
+<h3>Get in touch</h3>
+<p>Call me or message me on WhatsApp.</p>
+<span class="cm-num">+966 541465369</span>
+<div class="cm-actions">
+<a class="btn btn-primary" href="tel:+966541465369">📞 Call now</a>
+<a class="btn btn-wa" href="https://wa.me/966541929762?text=Hello%20Mohammed%2C%20I%20saw%20your%20portfolio." target="_blank" rel="noopener">💬 WhatsApp Business</a>
+</div>
+</div>
+</div>
 <main id="top">
 <section class="hero"><div class="wrap hero-grid">
 <div>
@@ -334,6 +357,13 @@ document.getElementById('rail').innerHTML=TN.map(function(k){return'<button type
 document.querySelectorAll('#chips button').forEach(function(x){x.onclick=function(){cat=x.textContent;view()}});
 document.querySelectorAll('#rail button').forEach(function(x,i){x.onclick=function(){tab=i;view()}});
 view();
+  var cmod=document.getElementById('contactModal'),cmLast=null;
+function openContact(e){if(e)e.preventDefault();cmLast=document.activeElement;cmod.classList.add('open');cmod.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.getElementById('cmClose').focus()}
+function closeContact(){cmod.classList.remove('open');cmod.setAttribute('aria-hidden','true');document.body.style.overflow='';if(cmLast)cmLast.focus()}
+document.querySelectorAll('.js-contact').forEach(function(a){a.addEventListener('click',function(e){mp.classList.remove('open');mb.setAttribute('aria-expanded',false);openContact(e)})});
+document.getElementById('cmClose').onclick=closeContact;
+cmod.onclick=function(e){if(e.target===cmod)closeContact()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&cmod.classList.contains('open'))closeContact()});
 </script>
 </body>
 </html>
